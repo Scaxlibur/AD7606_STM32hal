@@ -4,6 +4,10 @@
 
 STM32F407 AD7606驱动代码，包含FFT
 
+> [!IMPORTANT]
+> 作者使用了基于CMake的编译工具链，[USART头文件](Core/Inc/usart.h)和[USART源文件](Core/Src/usart.c)中关于printf的定义可能需要修改，尤其是当开发者使用Keil工具链编译时
+> 修改方法：使用CubeMX配置文件重新生成即可，记得切换对应的生成方式，如MDK-ARM
+
 ## 整体思路
 
 ad7606通电后一直采集数据，STM32通过TIM4定时设置采样率，计数器到达重装值后触发中断，在中断中把数据存入数组。
