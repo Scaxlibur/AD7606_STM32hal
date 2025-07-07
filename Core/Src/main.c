@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -87,14 +86,12 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 	
-		//注意注释掉main中的tim4_init		
 	
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-  // MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 
 	/*
