@@ -1,3 +1,8 @@
 Drivers/
 build/
 Middlewares/
+.vscode/
+cmake/
+.mxproject
+./startup_stm32f407xx.s
+./STM32F407XX_FLASH.ld
