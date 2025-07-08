@@ -82,7 +82,6 @@ void ad7606_get_fft_data(void);
 void fft_get_maxvalue(void);
 float32_t filter_fft(void);
 int32_t ad7606_get_signal_average_val(int8_t channal,int8_t average_num);
-uint8_t GetAdcFormFifo(uint16_t *_usReadAdc);
 
 extern FIFO_t  g_tAD;
 

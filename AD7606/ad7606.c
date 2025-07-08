@@ -295,8 +295,87 @@ int32_t ad7606_get_signal_average_val(int8_t channal,int8_t average_num)
 }
 
 
+/**
+ * @brief 获得用于分析的数组,向数组InPutBuffer中填入数据
+*/
+void ad7606_get_fft_data()
+{
+	int i;
+	printf("%d",i);
+	for (i=0;i<fftSize;i++)                                                   
+	{
+		InPutBuffer[2*i] = ((float)((short)g_tAD.usBuf[0])/32768/2);              
+		InPutBuffer[2*i+1] = 0;
+		g_tAD.usWrite = 0;
+		HAL_Delay(1);
+	}
+}
 
+/**
+ * @brief 对输入数组进行FFT运算。并且输出
+		1、频率 Freq
+		2、幅值 Amplitude
+		3、直流分量 DC_Component
+		4、周期均方（有效值）Virtual_value
+ */
+void fft_get_maxvalue()
+{
+	int k;
+	
+	if(fft_complete_flag == 1)
+	{
+		arm_cfft_f32(&arm_cfft_sR_f32_len64,MidBuffer,ifftFlag,doBitReverse);      //对输入数组进行FFT变换，变换结果将存放在输入数组中
+	
+	  arm_cmplx_mag_f32(MidBuffer,OutPutBuffer,fftSize);                         //对经过FFT变换的数组进行取模运算，运算结果将存放在OutPutBuffer数组中
+	
+	  arm_max_f32(OutPutBuffer,fftSize,&maxvalue,&Index);                        //输出数组中频域最大的数值和其所在数组中的位置
 
+		for(k=0;k<(fftSize/2-1);k++)
+		{
+			FreqBuffer[k] = OutPutBuffer[k+1];                                       //取输出结果的一半，并且去除直流分量
+		}
+		
+		arm_max_f32(FreqBuffer,(fftSize/2-1),&Freq_maxvalue,&Freq_Index);          //去除直流分量后输出数组中频域最大的数值和其所在数组中的位置
+		
+		Freq = (Freq_Index+1)*((float)sample_freq/(float)fftSize);                 //频率 = (N-1)*Fs/FFTSize        单位Hz
+		
+		Amplitude = Freq_maxvalue/((float)fftSize/2)*10000;                        //频率幅度 = value/FFTSize/2*10   单位V
+		
+		DC_Component = OutPutBuffer[0]/fftSize*10000;                              //直流分量 = value/FFTSize
+		
+		Virtual_value = Amplitude/1.4142135;                                       //有效值
+		
+		res = ((Virtual_value-8)/43.3)/(4-((Virtual_value-8)/43.3))*2000;
+		
+		//printf("maxvalue = %f \r\n location = %d  \r\n",maxvalue,Index);
+		
+	  printf("Fmaxvalue = %f \r\n Amplitude = %f  \r\n  DC_Component = %f  \r\n  Virtual_value = %f  \r\n Res = %f  \r\n  ",Freq,Amplitude,DC_Component,Virtual_value,res);
+		
+		
+		fft_complete_flag = 0;                                                     //标志位置0，表示转换完成
+		
+	} 
+}
 
-
-
+/**
+ * @brief	对fft产生的值进行滤波
+ */
+float32_t filter_fft()
+{
+	uint16_t j;
+	float32_t sum=0;
+	float32_t result=0;
+	
+	for(j=0;j<Filter_average_num;j++)
+	{
+		fft_get_maxvalue();
+		
+		sum = sum+Amplitude;
+	}
+	
+	result = sum/4;
+	
+	printf("Amplitude = %f",result);
+	
+	return result;
+}
