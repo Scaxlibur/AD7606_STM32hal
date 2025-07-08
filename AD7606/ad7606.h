@@ -14,14 +14,22 @@
             
 ****************************************************************************
 */
-#ifndef ad7606_ad7606_H
-#define ad7606_ad7606_H
-// #include "sys.h"
+#ifndef _ad7606_H_
+#define _ad7606_H_
+#include "stdint.h"
+#include "string.h"
+#include "stm32f4xx.h"
+#include <stdio.h>
+#include "gpio.h"
+#include "tim.h"
+#include "usart.h"
+#include "stdio.h"
 #include "string.h"
 #include "arm_math.h"
-#include "main.h"
+#include "arm_const_structs.h"
+#include "arm_common_tables.h"
 /*????????��???*/
-#define ENABLE_INT()    __set_PRIMASK(0)    /* ???????��? */
+#define ENABLE_INT()     __set_PRIMASK(0)    /* ???????��? */
 #define DISABLE_INT()    __set_PRIMASK(1)    /* ???????��? */
 
 /*??????????????????*/

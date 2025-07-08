@@ -23,8 +23,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "arm_math.h"
-// #include "arm_const_structs.h"
 #include "ad7606.h"
 #include "stdio.h"
 /* USER CODE END Includes */

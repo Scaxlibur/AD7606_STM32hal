@@ -1,14 +1,4 @@
-#include "stm32f4xx.h"
-#include <stdio.h>
 #include "ad7606.h"
-#include "gpio.h"
-#include "tim.h"
-#include "usart.h"
-#include "stdio.h"
-#include "string.h"
-#include "arm_math.h"
-// #include "arm_const_structs.h"
-// #include "arm_common_tables.h"
 
 FIFO_t g_tAD;            //定义一个数据交换缓冲区
 
@@ -33,6 +23,7 @@ float32_t Mid_Filter_Freq_Buffer[Filter_average_num];    //频率平均滤波时
 /*定义fft运算中的参数*/
 uint32_t fftSize = 64;                          //FFT计算点数
 uint32_t doBitReverse = 1;                      //按位取反
+uint8_t ifftFlag = 0;                        //FFT变换标志，0表示FFT变换，1表示IFFT变换
 
 /*定义计算结果存放*/
 float32_t maxvalue;                             //计算出频域上最大值(包括直流分量)
