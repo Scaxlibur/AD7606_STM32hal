@@ -49,7 +49,6 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_SOURCE_DIR}/AD7606/ad7606.c
-    ${CMAKE_SOURCE_DIR}/AD7606/Change.c
 )
 
 # Add include paths
