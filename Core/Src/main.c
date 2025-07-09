@@ -109,19 +109,8 @@ int main(void)
   {
 		int32_t average_val;
 		average_val = ad7606_get_signal_average_val(1,8);//AIN1迭代8次的值
-    
-    
-    printf("average_val_AIN1 = %d mv\n",ad7606_get_signal_average_val(1,8));
-    // printf("average_val_AIN2 = %d mv\n",ad7606_get_signal_average_val(2,8));
-    // printf("average_val_AIN3 = %d mv\n",ad7606_get_signal_average_val(3,8));
-    // printf("average_val_AIN4 = %d mv\n",ad7606_get_signal_average_val(4,8));
-    // printf("average_val_AIN5 = %d mv\n",ad7606_get_signal_average_val(5,8));
-    // printf("average_val_AIN6 = %d mv\n",ad7606_get_signal_average_val(6,8));
-    // printf("average_val_AIN7 = %d mv\n",ad7606_get_signal_average_val(7,8));
-    // printf("average_val_AIN7 = %d mv\n",ad7606_get_signal_average_val(8,8));
-    
+    printf("average_val_AIN1 = %ld mv\n",average_val);
 
-		
 		// for(int j=0;j<8;j++)
 		// {
 
@@ -135,9 +124,9 @@ int main(void)
 		// printf("\n");
     
 		HAL_Delay(200);//注意延时不要太久
-		//printf("AIN1 = %f mV\r\n",(10000*(float)((short)g_tAD.usBuf[0])/32768/2));//AD7606的FFT数据处理在tim4中断函数中
+		// printf("AIN1 = %f mV\r\n",(10000*(float)((short)g_tAD.usBuf[0])/32768/2));//AD7606的FFT数据处理在tim4中断函数中
 		
-		//fft_get_maxvalue();
+		// fft_get_maxvalue();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -192,10 +181,7 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef  *htim)
-{
-  
-	  static unsigned char ledstate = 0;
-	  
+{	  
     if (htim == (&htim4))                    //TIM4中断后读取adc数值
     {
         ad7606_IRQSrc();

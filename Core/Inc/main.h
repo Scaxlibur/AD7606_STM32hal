@@ -63,8 +63,6 @@ void Error_Handler(void);
 #define CONVST_GPIO_Port GPIOA
 #define RANGE_Pin GPIO_PIN_2
 #define RANGE_GPIO_Port GPIOA
-#define Change_Pin GPIO_PIN_5
-#define Change_GPIO_Port GPIOA
 #define OS0_Pin GPIO_PIN_4
 #define OS0_GPIO_Port GPIOC
 #define OS1_Pin GPIO_PIN_5

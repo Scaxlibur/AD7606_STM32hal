@@ -28,19 +28,17 @@
 #include "arm_math.h"
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
-/*????????��???*/
-#define ENABLE_INT()     __set_PRIMASK(0)    /* ???????��? */
-#define DISABLE_INT()    __set_PRIMASK(1)    /* ???????��? */
 
-/*??????????????????*/
-#define CH_NUM            8   //????8?????
+#define ENABLE_INT()     __set_PRIMASK(0) 
+#define DISABLE_INT()    __set_PRIMASK(1) 
+
+#define CH_NUM           8 
 #define FIFO_SIZE        1*1024*2
 
 #define uchar unsigned char
 #define uint  unsigned int    
 #define ulong  unsigned long int
 
-//?????????
 #define AD_CS_LOW()                         CS_GPIO_Port->BSRR = CS_Pin << 16U
 #define AD_CS_HIGH()                        CS_GPIO_Port->BSRR = CS_Pin
 
@@ -70,7 +68,6 @@
 
 #define AD_MISO_IN                          HAL_GPIO_ReadPin(MISO_GPIO_Port, MISO_Pin)
 
-/*AD????????????*/
 typedef struct
 {
     uint16_t usRead;
@@ -93,5 +90,5 @@ int32_t ad7606_get_signal_average_val(int8_t channal,int8_t average_num);
 
 extern FIFO_t  g_tAD;
 
-#endif //ad7606_ad7606_H
+#endif
 

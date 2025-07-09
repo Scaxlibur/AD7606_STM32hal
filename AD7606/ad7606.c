@@ -143,7 +143,7 @@ void ad7606_StartConv(void)
 void SPI_SendData(uint16_t data)
 {
     uint8_t count=0;
-    AD_SCK_LOW();    //???μ??óDD§
+    AD_SCK_LOW();    §
     for(count=0;count<16;count++)
     {
         if(data&0x8000)
@@ -152,7 +152,7 @@ void SPI_SendData(uint16_t data)
             AD_MISO_HIGH();
         data<<=1;
         AD_SCK_LOW();
-        AD_CSK_HIGH();        //é?éy??óDD§
+        AD_CSK_HIGH();    
     }
 }
 
@@ -164,10 +164,10 @@ uint16_t SPI_ReceiveData(void)
     uint8_t count=0;
     uint16_t Num=0;
     AD_CSK_HIGH();
-    for(count=0;count<16;count++)//?á3?16??êy?Y
+    for(count=0;count<16;count++)
     {
         Num<<=1;
-        AD_SCK_LOW();    //???μ??óDD§
+        AD_SCK_LOW();   
         if(AD_MISO_IN)Num++;
         AD_CSK_HIGH();
     }
@@ -197,7 +197,8 @@ void ad7606_IRQSrc(void)
     uint16_t usReadValue;
         static int j;
 
-    /* 读取数据
+    /* 
+    读取数据
     示波器监视，CS低电平持续时间 35us
     */
     AD_CS_LOW();
@@ -248,9 +249,9 @@ void ad7606_StartRecord(void)
 {
     //ad7606_Reset();
 
-    ad7606_StartConv();                /* ???ˉ2é?ù￡?±ü?aμú1×éêy?Yè?0μ??êìa */
+    ad7606_StartConv(); 
 
-    g_tAD.usRead = 0;                /* ±?D??ú?a??TIM2???°??0 */
+    g_tAD.usRead = 0; 
     g_tAD.usWrite = 0;
 
     MX_TIM4_Init();         //设置定时器4频率
