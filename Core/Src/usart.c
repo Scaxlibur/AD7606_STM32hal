@@ -115,22 +115,10 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-//ע�Ⲩ���ʵ�ͬ���͹�ѡUse Micro LIB
 
 int _write(int fd, char *ptr, int len)
 {
     HAL_UART_Transmit(&huart1, (uint8_t*)ptr, len, 0xFFFF);
     return len;
-}
-void Print_Float(float Vaule)
-{
-	int integer,decimal_1,decimal_2,decimal_3;
-	
-	integer = (int)Vaule;                   //提取整数部分
-	decimal_1 = (int)((Vaule-integer)*10)%10; //小数点后第一位
-	decimal_2 = (int)((Vaule-integer)*100)%10; //小数点后第二位
-	decimal_3 = (int)((Vaule-integer)*1000)%10; //小数点后第二位
-
-	printf("%d.%d%d%d",integer,decimal_1,decimal_2,decimal_3);
 }
 /* USER CODE END 1 */

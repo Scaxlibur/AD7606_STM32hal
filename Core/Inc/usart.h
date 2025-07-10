@@ -38,8 +38,6 @@ extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN Private defines */
 #define printf(...)  HAL_UART_Transmit(&huart1, (uint8_t *)u_buf, sprintf((char*)u_buf, __VA_ARGS__), 0xffff)
 extern uint8_t u_buf[256];
-void Print_Float(float Vaule);
-
 
 /* USER CODE END Private defines */
 

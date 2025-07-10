@@ -45,7 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int i;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
