@@ -10,6 +10,7 @@
                 PC4 -> OS0                                        OUT_PP        VERY_HIGH
                 PC5 -> OS1                                        OUT_PP        VERY_HIGH
                 PC6 -> OS2                                        OUT_PP        VERY_HIGH
+                PB15 -> BUSY                                      EXTI          FALLING
                 GND -> GND                                        OUT_PP        VERY_HIGH
             
 ****************************************************************************

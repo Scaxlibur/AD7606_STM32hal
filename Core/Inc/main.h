@@ -67,6 +67,9 @@ void Error_Handler(void);
 #define OS0_GPIO_Port GPIOC
 #define OS1_Pin GPIO_PIN_5
 #define OS1_GPIO_Port GPIOC
+#define BUSY_Pin GPIO_PIN_15
+#define BUSY_GPIO_Port GPIOB
+#define BUSY_EXTI_IRQn EXTI15_10_IRQn
 #define OS2_Pin GPIO_PIN_6
 #define OS2_GPIO_Port GPIOC
 #define RST_Pin GPIO_PIN_10

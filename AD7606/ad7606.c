@@ -1,5 +1,7 @@
 #include "ad7606.h"
 
+uint8_t readable = 0; //标志位，表示是否可以读取数据
+
 FIFO_t g_tAD;            //定义一个数据交换缓冲区
 
 /*采样率*/
@@ -193,14 +195,19 @@ uint16_t ad7606_ReadBytes(void)
  */
 void ad7606_IRQSrc(void)
 {
+    if(readable == 0) //如果没有数据可读，则直接返回
+    {
+        return;
+    }
     uint8_t i;
     uint16_t usReadValue;
-        static uint32_t j;
+    static uint32_t j;
 
     /* 
     读取数据
     示波器监视，CS低电平持续时间 35us
     */
+
     AD_CS_LOW();
     for (i = 0; i < CH_NUM; i++)
     {
@@ -208,38 +215,42 @@ void ad7606_IRQSrc(void)
         if (g_tAD.usWrite < FIFO_SIZE)
         {
             g_tAD.usBuf[g_tAD.usWrite] = usReadValue;
-            ++g_tAD.usWrite;
+            g_tAD.usWrite++;
+        }else
+        {
+           
         }
     }
-
+     g_tAD.usWrite = 0;
     AD_CS_HIGH();
-    
-    //g_tAD.usWrite = 0;
-
-    //FFT运算
+    readable = 0; //读取完数据后，清除标志位
     ad7606_StartConv();
-        if( j < fftSize )
+
+    /*
+    //FFT运算
+    if( j < fftSize )
+    {
+        InPutBuffer[2*j] = ((float)((short)g_tAD.usBuf[0])/32768/2);         //数据存放在输入数组的偶数位
+        InPutBuffer[2*j+1] = 0;                                              //奇数位置零
+        g_tAD.usWrite = 0;
+        j++;
+    }
+    else if( j == fftSize)
+    {
+        j = 0;
+        if(fft_complete_flag == 0)
         {
-            InPutBuffer[2*j] = ((float)((short)g_tAD.usBuf[0])/32768/2);         //数据存放在输入数组的偶数位
-            InPutBuffer[2*j+1] = 0;                                              //奇数位置零
-            g_tAD.usWrite = 0;
-            j++;
+            memcpy(MidBuffer,InPutBuffer,sizeof(InPutBuffer));  //将输入数组的值复制到中间数组              
+            fft_complete_flag = 1;
         }
-        else if( j == fftSize)
+        else if(fft_complete_flag == 1)
         {
-            j = 0;
-            if(fft_complete_flag == 0)
-            {
-                memcpy(MidBuffer,InPutBuffer,sizeof(InPutBuffer));  //将输入数组的值复制到中间数组              
-                fft_complete_flag = 1;
-            }
-            else if(fft_complete_flag == 1)
-            {
-                fft_complete_flag = 1;
-            }
-            else 
-                printf("error");
+            fft_complete_flag = 1;
         }
+        else 
+            printf("error");
+    }
+            */
 }
 
 /**
@@ -254,7 +265,7 @@ void ad7606_StartRecord(void)
     g_tAD.usRead = 0; 
     g_tAD.usWrite = 0;
 
-    MX_TIM4_Init();         //设置定时器4频率
+    MX_TIM4_Init();                         //设置定时器4频率
     HAL_TIM_Base_Start_IT(&htim4);         //使能定时器4中断
 }
 
@@ -281,7 +292,7 @@ int32_t ad7606_get_signal_average_val(int8_t channal,int8_t average_num)
     {
         val = val + ((float)((short)g_tAD.usBuf[channal-1])/32768/2);           //累加
     }
-    g_tAD.usWrite = 0;
+    // g_tAD.usWrite = 0;
     int_singal_sample_val = ((int32_t)10000)*(val / average_num);           //得到平均值
     return int_singal_sample_val;
 }

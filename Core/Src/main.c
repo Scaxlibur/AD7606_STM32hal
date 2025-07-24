@@ -45,7 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+extern uint8_t readable; //标志位，表示是否可以读取ADC数据
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -107,9 +107,21 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		int32_t average_val;
-		average_val = ad7606_get_signal_average_val(1,8);//AIN1迭代8次的值
-    printf("average_val_AIN1 = %ld mv\n",average_val);
+    int32_t val[1024];
+		//int32_t average_val;
+		//average_val = ad7606_get_signal_average_val(8,1);//AIN1迭代1次的值
+    //printf("%ld\n",average_val);
+    for(int j=0; j<1024; j++)
+    {
+      val[j] = ad7606_get_signal_average_val(8,1); //获取AIN1的平均值
+    }
+    HAL_Delay(200);
+    for (int i = 0; i < 1024; i++)
+    {
+      printf("%ld\n", val[i]); //打印每个采样值
+      HAL_Delay(1); // 延时1ms，避免串口输出过快
+    }
+    
 
 		// for(int j=0;j<8;j++)
 		// {
@@ -122,9 +134,9 @@ int main(void)
 
 		// }
 		// printf("\n");
-    
 		HAL_Delay(200);//注意延时不要太久
-		// printf("AIN1 = %f mV\r\n",(10000*(float)((short)g_tAD.usBuf[0])/32768/2));//AD7606的FFT数据处理在tim4中断函数中
+
+		
 		
 		// fft_get_maxvalue();
     /* USER CODE END WHILE */
@@ -185,6 +197,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef  *htim)
     if (htim == (&htim4))                    //TIM4中断后读取adc数值
     {
         ad7606_IRQSrc();
+    }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == BUSY_Pin)                //BUSY引脚中断
+    {
+        readable = 1;                        //设置标志位，表示可以读取数据
     }
 }
 /* USER CODE END 4 */
